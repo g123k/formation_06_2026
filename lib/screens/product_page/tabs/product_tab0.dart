@@ -9,6 +9,7 @@ class ProductTab0 extends StatelessWidget {
   const ProductTab0({super.key});
 
   static const double _kImageHeight = 300.0;
+  static const double _kBorderRadius = 16.0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +32,14 @@ class ProductTab0 extends StatelessWidget {
           PositionedDirectional(
             start: 0.0,
             end: 0.0,
-            top: _kImageHeight - 16.0,
+            top: _kImageHeight - _kBorderRadius,
             bottom: 0.0,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(_kBorderRadius),
+                ),
               ),
               padding: EdgeInsetsDirectional.only(
                 top: 30.0,
@@ -51,12 +54,39 @@ class ProductTab0 extends StatelessWidget {
                     style: context.theme.title1,
                   ),
                   Text('Text 2'),
+                  Scores(),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class Scores extends StatelessWidget {
+  const Scores({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 44,
+                child: _NutriScore(nutriscore: ProductNutriScore.A),
+              ),
+              VerticalDivider(),
+              Expanded(flex: 56, child: _NovaGroup(novaScore: .group3)),
+            ],
+          ),
+        ),
+        Divider(),
+        _GreenScore(greenScore: .D),
+      ],
     );
   }
 }
