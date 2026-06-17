@@ -13,6 +13,7 @@ class ProductTab0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      key: GlobalKey(),
       children: [
         PositionedDirectional(
           top: 0.0,
