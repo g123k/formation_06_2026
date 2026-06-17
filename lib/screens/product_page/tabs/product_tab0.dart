@@ -8,85 +8,126 @@ import 'package:formation_flutter/res/app_theme.dart';
 class ProductTab0 extends StatelessWidget {
   const ProductTab0({super.key});
 
-  static const double _kImageHeight = 300.0;
-  static const double _kBorderRadius = 16.0;
+  static const double kImageHeight = 300.0;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Stack(
+    return Stack(
+      children: [
+        PositionedDirectional(
+          top: 0.0,
+          start: 0.0,
+          end: 0.0,
+          height: kImageHeight,
+          child: _ProductImage(),
+        ),
+        Positioned.fill(
+          child: SingleChildScrollView(
+            padding: EdgeInsetsDirectional.only(
+              top: kImageHeight - _ProductBody._radius,
+            ),
+            child: _ProductBody(),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductImage extends StatelessWidget {
+  const _ProductImage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=1310&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      fit: .cover,
+      cacheWidth:
+          (MediaQuery.widthOf(context) * MediaQuery.devicePixelRatioOf(context))
+              .toInt(),
+    );
+  }
+}
+
+class _ProductBody extends StatelessWidget {
+  const _ProductBody();
+
+  static const double _radius = 16.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(_radius)),
+      ),
+      padding: EdgeInsetsDirectional.only(
+        top: 30.0,
+        start: 20.0,
+        end: 20.0,
+      ),
+      child: Column(
+        crossAxisAlignment: .start,
         children: [
-          PositionedDirectional(
-            top: 0.0,
-            start: 0.0,
-            end: 0.0,
-            height: _kImageHeight,
-            child: Image.network(
-              'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=1310&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-              fit: .cover,
-              cacheHeight:
-                  (_kImageHeight * MediaQuery.devicePixelRatioOf(context))
-                      .toInt(),
-            ),
+          Text(
+            'Petits pois et carottes',
+            style: Theme.of(context).extension<OffThemeExtension>()!.title1,
           ),
-          PositionedDirectional(
-            start: 0.0,
-            end: 0.0,
-            top: _kImageHeight - _kBorderRadius,
-            bottom: 0.0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(_kBorderRadius),
-                ),
-              ),
-              padding: EdgeInsetsDirectional.only(
-                top: 30.0,
-                start: 16.0,
-                end: 16.0,
-              ),
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  Text(
-                    'Text 1',
-                    style: context.theme.title1,
-                  ),
-                  Text('Text 2'),
-                  Scores(),
-                ],
-              ),
-            ),
-          ),
+          Text('Cassegrain'),
+          SizedBox(height: 20.0),
+          _Scores(),
+          SizedBox(height: 20.0),
+          _Info(),
+          SizedBox(height: 10.0),
         ],
       ),
     );
   }
 }
 
-class Scores extends StatelessWidget {
-  const Scores({super.key});
+class _Scores extends StatelessWidget {
+  const _Scores();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IntrinsicHeight(
-          child: Row(
-            children: [
-              Expanded(
-                flex: 44,
-                child: _NutriScore(nutriscore: ProductNutriScore.A),
+    return DefaultTextStyle(
+      style: context.theme.altText,
+      child: ColoredBox(
+        color: AppColors.grey1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    flex: 44,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 5.0),
+                      child: _NutriScore(
+                        nutriscore: ProductNutriScore.A,
+                      ),
+                    ),
+                  ),
+                  const VerticalDivider(),
+                  Expanded(
+                    flex: 56,
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 25.0),
+                      child: _NovaGroup(novaScore: ProductNovaScore.group4),
+                    ),
+                  ),
+                ],
               ),
-              VerticalDivider(),
-              Expanded(flex: 56, child: _NovaGroup(novaScore: .group3)),
-            ],
-          ),
+            ),
+            const Divider(),
+            _GreenScore(
+              greenScore: ProductGreenScore.D,
+            ),
+          ],
         ),
-        Divider(),
-        _GreenScore(greenScore: .D),
-      ],
+      ),
     );
   }
 }
@@ -98,7 +139,10 @@ class _NutriScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MergeSemantics(
+    return Semantics(
+      value: 'Nutriscore A',
+      excludeSemantics: true,
+      container: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,3 +287,128 @@ class _GreenScore extends StatelessWidget {
     };
   }
 }
+
+class _Info extends StatelessWidget {
+  const _Info();
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations localizations = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        _ProductItemValue(
+          label: localizations.product_quantity,
+          value: '100g',
+        ),
+        _ProductItemValue(
+          label: localizations.product_countries,
+          value: 'France',
+          includeDivider: false,
+        ),
+        const SizedBox(height: 15.0),
+        Row(
+          children: <Widget>[
+            Expanded(
+              flex: 40,
+              child: _ProductBubble(
+                label: localizations.product_vegan,
+                value: _ProductBubbleValue.off,
+              ),
+            ),
+            const Spacer(flex: 10),
+            Expanded(
+              flex: 40,
+              child: _ProductBubble(
+                label: localizations.product_vegetarian,
+                value: _ProductBubbleValue.on,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ProductItemValue extends StatelessWidget {
+  const _ProductItemValue({
+    required this.label,
+    required this.value,
+    this.includeDivider = true,
+  });
+
+  final String label;
+  final String value;
+  final bool includeDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return MergeSemantics(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(vertical: 12.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: Text(label)),
+                Expanded(child: Text(value, textAlign: TextAlign.end)),
+              ],
+            ),
+          ),
+          if (includeDivider) const Divider(height: 1.0),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProductBubble extends StatelessWidget {
+  const _ProductBubble({required this.label, required this.value});
+
+  final String label;
+  final _ProductBubbleValue value;
+
+  @override
+  Widget build(BuildContext context) {
+    final String semanticsValue = value == _ProductBubbleValue.on
+        ? AppLocalizations.of(context)!.yes
+        : AppLocalizations.of(context)!.no;
+    return Semantics(
+      label: '$label : $semanticsValue',
+      excludeSemantics: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.blueLight,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        padding: const EdgeInsetsDirectional.symmetric(
+          vertical: 10.0,
+          horizontal: 15.0,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              value == _ProductBubbleValue.on
+                  ? AppIcons.checkmark
+                  : AppIcons.close,
+              color: AppColors.white,
+            ),
+            const SizedBox(width: 10.0),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(color: AppColors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum _ProductBubbleValue { on, off }
