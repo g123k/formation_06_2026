@@ -39,6 +39,22 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: ProductPageTabs.values
+            .map(
+              (tab) => BottomNavigationBarItem(
+                icon: Icon(tab.icon),
+                label: tab.label(AppLocalizations.of(context)!),
+              ),
+            )
+            .toList(),
+        currentIndex: _currentTab.index,
+        onTap: (int position) {
+          setState(() {
+            _currentTab = ProductPageTabs.values[position];
+          });
+        },
+      ),
     );
   }
 }
