@@ -39,12 +39,6 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        width: double.infinity,
-        height: 100.0,
-        child: ColoredBox(color: Colors.red),
-      ),
-      extendBody: true,
     );
   }
 }
