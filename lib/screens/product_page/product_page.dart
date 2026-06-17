@@ -18,8 +18,6 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    SizedBox
     return Scaffold(
       body: Stack(
         children: [
@@ -41,22 +39,12 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: ProductPageTabs.values
-            .map(
-              (tab) => BottomNavigationBarItem(
-                icon: Icon(tab.icon),
-                label: tab.label(AppLocalizations.of(context)!),
-              ),
-            )
-            .toList(),
-        currentIndex: _currentTab.index,
-        onTap: (int position) {
-          setState(() {
-            _currentTab = ProductPageTabs.values[position];
-          });
-        },
+      bottomNavigationBar: SizedBox(
+        width: double.infinity,
+        height: 100.0,
+        child: ColoredBox(color: Colors.red),
       ),
+      extendBody: true,
     );
   }
 }
